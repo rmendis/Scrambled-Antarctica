@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Antarctica_Text -->
+<!-- Author: blkbutterfly74 -->
+<!-- DateCreated: 2/10/2018 2:02:35 PM -->
+<GameData>
+	<FrontEndText>
+		
+		<!-- Texts for Maps -->
+		<Row Tag="LOC_ANTARCTICA_MAP_NAME">
+			<Text>Scrambled Antarctica</Text>
+		</Row>
+		<Row Tag="LOC_ANTARCTICA_MAP_DESCRIPTION">
+			<Text>An internally randomized map of a fictional/thawed Antarctica.</Text>
+		</Row>
+
+	</FrontEndText>
+</GameData>

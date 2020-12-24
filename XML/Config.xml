@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Config -->
+<!-- Author: blkbutterfly74 -->
+<!-- DateCreated: 2/10/2018 1:59:09 PM -->
+<GameInfo>
+	<Maps>
+		<!-- for base game -->
+		<Row  Domain="StandardMaps" File="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica.lua" Name="LOC_ANTARCTICA_MAP_NAME" Description="LOC_ANTARCTICA_MAP_DESCRIPTION"/>
+		<Row  Domain="Maps:Expansion2Maps" File="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica_XP2.lua" Name="LOC_ANTARCTICA_MAP_NAME" Description="LOC_ANTARCTICA_MAP_DESCRIPTION"/>
+	</Maps>
+
+	<DomainValueFilters>
+		<Row Domain="Maps:Expansion2Maps" Value="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica.lua" Filter="difference"/>
+	</DomainValueFilters>
+
+	<!-- advanced settings -->
+	<Parameters>
+		<Row Key1="Map" Key2="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica.lua" ParameterId="WorldAge" Name="LOC_MAP_WORLD_AGE_NAME" Description="LOC_MAP_WORLD_AGE_DESCRIPTION" Domain="WorldAge" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="world_age" GroupId="MapOptions" Hash="0" SortIndex="230"/>
+		<Row Key1="Map" Key2="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica.lua" ParameterId="Rainfall" Name="LOC_MAP_RAINFALL_NAME" Description="LOC_MAP_RAINFALL_DESCRIPTION" Domain="Rainfall" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="rainfall" GroupId="MapOptions" Hash="0" SortIndex="250"/>
+		<Row Key1="Map" Key2="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica_XP2.lua" ParameterId="WorldAge" Name="LOC_MAP_WORLD_AGE_NAME" Description="LOC_MAP_WORLD_AGE_DESCRIPTION" Domain="WorldAge" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="world_age" GroupId="MapOptions" Hash="0" SortIndex="230"/>
+		<Row Key1="Map" Key2="{71F20D80-3A64-433D-AFBC-1968634AC7F1}Maps/Antarctica_XP2.lua" ParameterId="Rainfall" Name="LOC_MAP_RAINFALL_NAME" Description="LOC_MAP_RAINFALL_DESCRIPTION" Domain="Rainfall" DefaultValue="2" ConfigurationGroup="Map" ConfigurationId="rainfall" GroupId="MapOptions" Hash="0" SortIndex="250"/>
+	</Parameters>
+</GameInfo>
