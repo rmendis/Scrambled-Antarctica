@@ -545,7 +545,7 @@ function FeatureGenerator:AddIceToMap()
 					end
 					if (TerrainBuilder.GetRandomNumber(100, "Permanent Ice") <= iFinalPercentNeeded) then
 					    local plot = Map.GetPlotByIndex(targetPlot.PlotIndex);
-						AddIceAtPlot(plot, x, y, kPhaseDetails.RandomEventEnum); 
+						AddIceAtPlot(plot, plot:GetX(), plot:GetY(), kPhaseDetails.RandomEventEnum); 
 					end
 				end
 			end
