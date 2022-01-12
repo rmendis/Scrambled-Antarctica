@@ -21,11 +21,10 @@ local g_iW, g_iH;
 local g_iFlags = {};
 local g_continentsFrac = nil;
 local g_iNumTotalLandTiles = 0; 
-local g_CenterX = 34;
+local g_CenterX = 39;			-- east of south pole by 5 hexs
 local g_CenterY = 30;
 local featuregen = nil;
-
---g_FEATURE_LYSEFJORDEN				= GetGameInfoIndex("Features", "FEATURE_LYSEFJORDEN");
+local g_iE;
 
 -------------------------------------------------------------------------------
 function GenerateMap()
@@ -36,6 +35,9 @@ function GenerateMap()
 	g_iW, g_iH = Map.GetGridSize();
 	g_iFlags = TerrainBuilder.GetFractalFlags();
 	local temperature = 0;
+
+	-- antarctic circle 0.41 rad from s. pole
+	g_iE = (g_iW/2)/0.41 * math.pi/2;
 
 	--	local world_age
 	local world_age_new = 5;
@@ -81,8 +83,7 @@ function GenerateMap()
 	AddCliffs(plotTypes, terrainTypes);
 	
 	local args = {
-		numberToPlace = (GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders - 2),
-		--Invalid = {g_FEATURE_DEAD_SEA, g_FEATURE_LYSEFJORDEN},
+		numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
 	};
 
 	local nwGen = NaturalWonderGenerator.Create(args);
@@ -321,7 +322,7 @@ function AddFeatures()
 		rainfall = 1 + TerrainBuilder.GetRandomNumber(3, "Random Rainfall - Lua");
 	end
 	
-	local args = {rainfall = rainfall, iReefPercent = 0}
+	local args = {rainfall = rainfall, iReefPercent = 0, iIcePercent = 0};		-- 0% additional ice
 	featuregen = FeatureGenerator.Create(args);
 
 	featuregen:AddFeatures(true, true);  --second parameter is whether or not rivers start inland);
@@ -458,29 +459,20 @@ function FeatureGenerator:AddIceToMap()
 	-- Count top/bottom map tiles
 	local iWaterTilesOnEdges = 0;
 
-	--   On bottom
+	-- edges of antarctica
 	for x = 0, self.iGridW - 1, 1 do
-		y = 0;
-		local i = y * self.iGridW + x;
-		local plot = Map.GetPlotByIndex(i);
-		if (plot ~= nil) then
-			if(TerrainBuilder.CanHaveFeature(plot, g_FEATURE_ICE) == true and IsAdjacentToLandPlot(x, y) == false) then
-				iWaterTilesOnEdges = iWaterTilesOnEdges + 1;
+		for y = 0, self.iGridH - 1, 1 do
+			local i = y * self.iGridW + x;
+			local plot = Map.GetPlotByIndex(i);
+			if (plot ~= nil) then
+				if(TerrainBuilder.CanHaveFeature(plot, g_FEATURE_ICE) == true and IsAdjacentToLandPlot(x, y) == true) then
+					iWaterTilesOnEdges = iWaterTilesOnEdges + 1;
+				end
 			end
 		end
 	end
 
-	--   On top
-	for x = 0, self.iGridW - 1, 1 do
-		local y = self.iGridH - 1;
-		local i = y * self.iGridW + x;
-		local plot = Map.GetPlotByIndex(i);
-		if (plot ~= nil) then
-			if(TerrainBuilder.CanHaveFeature(plot, g_FEATURE_ICE) == true and IsAdjacentToLandPlot(x, y) == false) then
-				iWaterTilesOnEdges = iWaterTilesOnEdges + 1;
-			end
-		end
-	end
+	print ("Water tiles on edges: " .. tostring(iWaterTilesOnEdges));
 
 	if (iWaterTilesOnEdges > 0) then
 		local iPercentNeeded = 100 * iPermanentIceTiles / iWaterTilesOnEdges;
@@ -555,21 +547,25 @@ end
 
 ------------------------------------------------------------------------------
 function AddIceAtPlot(plot, iX, iY, iE)
-	local iDistanceFromCenter = Map.GetPlotDistance(iX, iY, g_CenterX, g_CenterY);	-- radial
-	local iScore = TerrainBuilder.GetRandomNumber(350, "Resource Placement Score Adjust");
+	local lat = GetRadialLatitudeAtPlot(antarctica, iX, iY);
 
-	iScore = iScore + ((g_iW/2 - iDistanceFromCenter)/(g_iW/2) * 100);
+	-- south polar ice
+	if (lat > 0.7) then
+		local iScore = TerrainBuilder.GetRandomNumber(100, "Resource Placement Score Adjust");
 
-	if(IsAdjacentToLandPlot(iX,iY) == true) then
-		iScore = iScore / 3.5;
-	end
+		iScore = iScore + math.exp(math.exp(math.exp(lat)))/50.0;
 
-	local iAdjacent = TerrainBuilder.GetAdjacentFeatureCount(plot, g_FEATURE_ICE);
-	iScore = iScore + 10.0 * iAdjacent;
+		if(IsAdjacentToLandPlot(iX,iY) == true) then
+			iScore = iScore / 2.0;
+		end
 
-	if(iScore > 100) then
-		TerrainBuilder.SetFeatureType(plot, g_FEATURE_ICE);
-		TerrainBuilder.AddIce(plot:GetIndex(), iE);
+		local iAdjacent = TerrainBuilder.GetAdjacentFeatureCount(plot, g_FEATURE_ICE);
+		iScore = iScore + 10.0 * iAdjacent;
+
+		if(iScore > 130) then
+			TerrainBuilder.SetFeatureType(plot, g_FEATURE_ICE);
+			TerrainBuilder.AddIce(plot:GetIndex(), iE);
+		end
 	end
 end
 
