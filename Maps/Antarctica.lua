@@ -20,7 +20,7 @@ local g_iW, g_iH;
 local g_iFlags = {};
 local g_continentsFrac = nil;
 local g_iNumTotalLandTiles = 0; 
-local g_CenterX = 34;
+local g_CenterX = 39;			-- east of south pole by 5 hexs
 local g_CenterY = 30;
 local g_iE;
 
@@ -430,10 +430,10 @@ function FeatureGenerator:AddIceAtPlot(plot, iX, iY)
 	local lat = GetRadialLatitudeAtPlot(antarctica, iX, iY);
 	
 	-- south polar ice
-	if (lat > 0.66) then
+	if (lat > 0.7) then
 		local iScore = TerrainBuilder.GetRandomNumber(100, "Resource Placement Score Adjust");
 
-		iScore = iScore + math.exp(lat) * 40;
+		iScore = iScore + math.exp(math.exp(math.exp(lat)))/50.0;
 
 		if(IsAdjacentToLandPlot(iX,iY) == true) then
 			iScore = iScore / 2.0;
