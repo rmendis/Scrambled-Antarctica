@@ -22,6 +22,7 @@ local g_continentsFrac = nil;
 local g_iNumTotalLandTiles = 0; 
 local g_CenterX = 34;
 local g_CenterY = 30;
+local g_iE;
 
 -------------------------------------------------------------------------------
 function GenerateMap()
@@ -32,6 +33,9 @@ function GenerateMap()
 	g_iW, g_iH = Map.GetGridSize();
 	g_iFlags = TerrainBuilder.GetFractalFlags();
 	local temperature = 0;
+
+	-- antarctic circle 0.41 rad from s. pole
+	g_iE = (g_iW/2)/0.41 * math.pi/2;
 	
 	plotTypes = GeneratePlotTypes();
 	terrainTypes = GenerateTerrainTypesArctic(plotTypes, g_iW, g_iH, g_iFlags, true);
@@ -422,21 +426,57 @@ function GenerateTerrainTypesArctic(plotTypes, iW, iH, iFlags, bNoCoastalMountai
 	
 	return terrainTypes; 
 end
+
+-- override: circular poles
+function FeatureGenerator:AddIceAtPlot(plot, iX, iY)
+	local lat = GetRadialLatitudeAtPlot(antarctica, iX, iY);
+	
+	-- south polar ice
+	if (lat > 0.66) then
+		local iScore = TerrainBuilder.GetRandomNumber(100, "Resource Placement Score Adjust");
+
+		iScore = iScore + math.exp(lat) * 40;
+
+		if(IsAdjacentToLandPlot(iX,iY) == true) then
+			iScore = iScore / 2.0;
+		end
+
+		local iAdjacent = TerrainBuilder.GetAdjacentFeatureCount(plot, g_FEATURE_ICE);
+		iScore = iScore + 10.0 * iAdjacent;
+
+		if(iScore > 130) then
+			TerrainBuilder.SetFeatureType(plot, g_FEATURE_ICE);
+		end
+	end
+	
+	return false;
+end
+
 ------------------------------------------------------------------------------
-function FeatureGenerator:AddIceAtPlot(plot, iX, iY, lat)
-	local iDistanceFromCenter = Map.GetPlotDistance(iX, iY, g_CenterX, g_CenterY);	-- radial
-	local iScore = TerrainBuilder.GetRandomNumber(350, "Resource Placement Score Adjust");
 
-	iScore = iScore + ((g_iW/2 - iDistanceFromCenter)/(g_iW/2) * 100);
+-- bugfix/patch - remember pythagoras?
+function __GetPlotDistance(iX1, iY1, iX0, iY0)
+	return math.sqrt((iX1-iX0)^2 + (iY1-iY0)^2);
+end
 
-	if(IsAdjacentToLandPlot(iX,iY) == true) then
-		iScore = iScore / 3.5;
-	end
+----------------------------------------------------------------------------------
+-- LATITUDE LOOKUP
+----------------------------------------------------------------------------------
+function GetRadialLatitudeAtPlot(variationFrac, iX, iY)
+	local iZ = __GetPlotDistance(iX, iY, g_CenterX, g_CenterY);		-- radial distance from center
 
-	local iAdjacent = TerrainBuilder.GetAdjacentFeatureCount(plot, g_FEATURE_ICE);
-	iScore = iScore + 10.0 * iAdjacent;
+	-- Terrain bands are governed by latitude (in rad).
+	local _lat = 1/2 - iZ/(2*g_iE);
 
-	if(iScore > 100) then
-		TerrainBuilder.SetFeatureType(plot, g_FEATURE_ICE);
-	end
+	-- Returns a latitude value between 0.0 (tropical) and 1.0 (polar).
+	local lat = 2 * _lat;
+	
+	-- Adjust latitude using variation fractal, to roughen the border between bands:
+	-- lessen the variation at edges
+	lat = lat + (128 - variationFrac:GetHeight(iX, iY))/(255.0 * 5.0) * iZ/(2*g_iE);
+
+	-- Limit to the range [0, 1]:
+	lat = math.clamp(lat, 0, 1);
+	
+	return lat;
 end
