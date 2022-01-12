@@ -436,7 +436,7 @@ function FeatureGenerator:AddIceAtPlot(plot, iX, iY)
 		iScore = iScore + math.exp(math.exp(math.exp(lat)))/50.0;
 
 		if(IsAdjacentToLandPlot(iX,iY) == true) then
-			iScore = iScore / 2.0;
+			iScore = iScore / 5.0;
 		end
 
 		local iAdjacent = TerrainBuilder.GetAdjacentFeatureCount(plot, g_FEATURE_ICE);
