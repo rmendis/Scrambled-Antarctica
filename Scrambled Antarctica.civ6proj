@@ -5,7 +5,7 @@
     <Name>Scrambled Antarctica</Name>
     <Guid>71f20d80-3a64-433d-afbc-1968634ac7f1</Guid>
     <ProjectGuid>d1359ee6-f053-4796-abb7-15e65ce9378d</ProjectGuid>
-    <ModVersion>9</ModVersion>
+    <ModVersion>10</ModVersion>
     <Teaser>An internally randomised map of Antarctica</Teaser>
     <Description>An internally randomised map of Antarctica. Fantasy/thawed. Standard size.</Description>
     <Authors>blkbutterfly74</Authors>
