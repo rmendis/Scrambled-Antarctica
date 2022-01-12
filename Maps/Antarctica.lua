@@ -65,8 +65,7 @@ function GenerateMap()
 	AddCliffs(plotTypes, terrainTypes);
 	
 	local args = {
-		numberToPlace = (GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders - 2),
-		-- Invalid = {g_FEATURE_DEAD_SEA, g_FEATURE_LYSEFJORDEN},
+		numberToPlace = GameInfo.Maps[Map.GetMapSize()].NumNaturalWonders,
 	};
 
 	local nwGen = NaturalWonderGenerator.Create(args);
