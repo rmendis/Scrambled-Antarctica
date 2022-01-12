@@ -23,8 +23,6 @@ local g_iNumTotalLandTiles = 0;
 local g_CenterX = 34;
 local g_CenterY = 30;
 
---g_FEATURE_LYSEFJORDEN				= GetGameInfoIndex("Features", "FEATURE_LYSEFJORDEN");
-
 -------------------------------------------------------------------------------
 function GenerateMap()
 	print("Generating Antarctica Map");
