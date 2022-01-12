@@ -327,16 +327,16 @@ function AddFeatures()
 
 	featuregen:AddFeatures();
 
-	-- remove inner forest and outer ice
+	-- remove inner forest
 	for iX = 0, g_iW - 1 do
 		for iY = 0, g_iH - 1 do
 			local index = (iY * g_iW) + iX;
 			local plot = Map.GetPlot(iX, iY);
-			local iDistanceFromCenter = Map.GetPlotDistance (iX, iY, g_CenterX, g_CenterY);
+			local lat = GetRadialLatitudeAtPlot(antarctica, iX, iY);
 
 			if (plot:GetFeatureType() == g_FEATURE_FOREST) then
 				-- same as Australia floodplain logic
-				if (TerrainBuilder.GetRandomNumber(150, "Resource Placement Score Adjust") >= iDistanceFromCenter) then
+				if (TerrainBuilder.GetRandomNumber(100, "Resource Placement Score Adjust") <= lat*100) then
 					TerrainBuilder.SetFeatureType(plot, -1);
 				end
 			end
