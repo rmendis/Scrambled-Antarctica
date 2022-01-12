@@ -373,26 +373,25 @@ function GenerateTerrainTypesArctic(plotTypes, iW, iH, iFlags, bNoCoastalMountai
 		plotTypes = RemoveCoastalMountains(plotTypes, terrainTypes);
 	end
 
-	local iTundraTop = antarctica:GetHeight(55);
+	local iSnowBottom = antarctica:GetHeight(0);
 
 	for iX = 0, iW - 1 do
 		for iY = 0, iH - 1 do
 			local index = (iY * iW) + iX;
+			local lat = GetRadialLatitudeAtPlot(antarctica, iX, iY);
+			local iSnowTop = antarctica:GetHeight(lat * 100);
 
-			local iDistanceFromCenter = Map.GetPlotDistance (iX, iY, g_CenterX, g_CenterY);
-			local iTundraBottom = antarctica:GetHeight(50 - iDistanceFromCenter/iW * 100);
-
-			local tundraVal = antarctica:GetHeight(iX, iY);
+			local snowVal = antarctica:GetHeight(iX, iY);
 
 			if (plotTypes[index] == g_PLOT_TYPE_MOUNTAIN) then
-				if ((tundraVal >= iTundraBottom) and (tundraVal <= iTundraTop)) then
-					terrainTypes[index] = g_TERRAIN_TYPE_TUNDRA_MOUNTAIN;
-				else terrainTypes[index] = g_TERRAIN_TYPE_SNOW_MOUNTAIN;
+				if ((snowVal >= iSnowBottom) and (snowVal <= iSnowTop)) then
+					terrainTypes[index] = g_TERRAIN_TYPE_SNOW_MOUNTAIN;
+				else terrainTypes[index] = g_TERRAIN_TYPE_TUNDRA_MOUNTAIN;
 				end
 			elseif (plotTypes[index] ~= g_PLOT_TYPE_OCEAN) then
-				if ((tundraVal >= iTundraBottom) and (tundraVal <= iTundraTop)) then
-					terrainTypes[index] = g_TERRAIN_TYPE_TUNDRA;
-				else terrainTypes[index] = g_TERRAIN_TYPE_SNOW;
+				if ((snowVal >= iSnowBottom) and (snowVal <= iSnowTop)) then
+					terrainTypes[index] = g_TERRAIN_TYPE_SNOW;
+				else terrainTypes[index] = g_TERRAIN_TYPE_TUNDRA;
 				end
 			end
 		end
