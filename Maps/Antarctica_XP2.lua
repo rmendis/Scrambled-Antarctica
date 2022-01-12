@@ -579,3 +579,32 @@ function AddFeaturesFromContinents()
 
 	featuregen:AddFeaturesFromContinents();
 end
+
+------------------------------------------------------------------------------
+
+-- bugfix/patch - remember pythagoras?
+function __GetPlotDistance(iX1, iY1, iX0, iY0)
+	return math.sqrt((iX1-iX0)^2 + (iY1-iY0)^2);
+end
+
+----------------------------------------------------------------------------------
+-- LATITUDE LOOKUP
+----------------------------------------------------------------------------------
+function GetRadialLatitudeAtPlot(variationFrac, iX, iY)
+	local iZ = __GetPlotDistance(iX, iY, g_CenterX, g_CenterY);		-- radial distance from center
+
+	-- Terrain bands are governed by latitude (in rad).
+	local _lat = 1/2 - iZ/(2*g_iE);
+
+	-- Returns a latitude value between 0.0 (tropical) and 1.0 (polar).
+	local lat = 2 * _lat;
+	
+	-- Adjust latitude using variation fractal, to roughen the border between bands:
+	-- lessen the variation at edges
+	lat = lat + (128 - variationFrac:GetHeight(iX, iY))/(255.0 * 5.0) * iZ/(2*g_iE);
+
+	-- Limit to the range [0, 1]:
+	lat = math.clamp(lat, 0, 1);
+	
+	return lat;
+end
