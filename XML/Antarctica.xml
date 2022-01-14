@@ -3,13 +3,6 @@
 <!-- Author: blkbutterfly74 -->
 <!-- DateCreated: 8/14/2017 11:41:28 PM -->
 <GameInfo>
-	<Types>
-		<!-- Features -->
-		<Delete Type="FEATURE_PIOPIOTAHI"/>
-		<Delete Type="FEATURE_YOSEMITE"/>
-		<Delete Type="FEATURE_PANTANAL"/>
-	</Types>
-	
 	<GlobalParameters>
 		<Replace Name="RIVER_SOURCE_RANGE_DEFAULT" Value="8" />
 
