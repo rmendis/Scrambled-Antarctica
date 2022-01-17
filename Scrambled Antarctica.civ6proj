@@ -17,8 +17,9 @@
     <AssemblyName>Scrambled Antarctica</AssemblyName>
     <RootNamespace>Scrambled Antarctica</RootNamespace>
     <FrontEndActionData><![CDATA[<FrontEndActions><UpdateDatabase id="UpdateConfig"><File>XML/Config.xml</File></UpdateDatabase><UpdateText id="UpdateText"><File>XML/Antarctica_Text.xml</File></UpdateText></FrontEndActions>]]></FrontEndActionData>
-    <InGameActionData><![CDATA[<InGameActions><ImportFiles id="AddAntarcticaParams"><File>XML/Antarctica.xml</File></ImportFiles><ImportFiles id="ImportMaps"><File>Maps/Antarctica.lua</File><File>Maps/Antarctica_XP2.lua</File></ImportFiles></InGameActions>]]></InGameActionData>
+    <InGameActionData><![CDATA[<InGameActions><ImportFiles id="AddAntarcticaParams"><Criteria>AntarcticaMapInUse</Criteria><File>XML/Antarctica.xml</File></ImportFiles><ImportFiles id="ImportMaps"><File>Maps/Antarctica.lua</File><File>Maps/Antarctica_XP2.lua</File></ImportFiles><UpdateDatabase id="AddAntarcticaParams_XP2"><Criteria>AntarcticaXP2MapInUse</Criteria><File>XML/Antarctica.xml</File></UpdateDatabase></InGameActions>]]></InGameActionData>
     <CompatibleVersions>1.2,2.0</CompatibleVersions>
+    <ActionCriteriaData><![CDATA[<ActionCriteria><Criteria id="AntarcticaMapInUse"><MapInUse>Antarctica.lua</MapInUse></Criteria><Criteria id="AntarcticaXP2MapInUse"><MapInUse>Antarctica_XP2.lua</MapInUse></Criteria></ActionCriteria>]]></ActionCriteriaData>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
     <OutputPath>.</OutputPath>
